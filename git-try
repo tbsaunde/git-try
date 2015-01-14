@@ -1,0 +1,33 @@
+#!/bin/bash
+
+if [ $# -ne 1 ]
+then
+	echo "Either a try syntax or a config variable must be provided."
+	exit 1
+fi
+
+git diff --quiet HEAD
+if [ $? -ne 0 ]
+then
+	echo "git try with a dirty work tree or index is not supported"
+	exit 2
+fi
+
+str="$1"
+
+# See if we've been given the name of a git config variable, which must be of
+# the form alphabetic character followed by any number of alphanumeric
+# characters or '-'s.
+key=$(echo -n "$str" | sed -ne '/^[[:alpha:]][[:alnum:]-]*$/p')
+if [ "$key" != "" ]
+then
+		opt=$(git config try.$str)
+		if [ "$opt" != "" ]
+		then
+			str="$opt"
+		fi
+	fi
+
+	git commit --allow-empty -m "try: $str"
+	git push try
+	git reset HEAD~

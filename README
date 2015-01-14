@@ -1,0 +1,12 @@
+A very stupid git wrapper to perform try pushes
+
+=== What Does Work ===
+- git try "<try syntax>"
+- git try <foo> where try.foo is a set git configuration variable.
+
+=== What Doesn't Work ===
+Everything else you might want from such a tool.
+
+=== Defects ===
+- It is assumed the remote to push try pushes to is named try.
+- the index and work tree must be clean.
